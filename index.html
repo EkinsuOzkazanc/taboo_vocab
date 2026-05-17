@@ -16,6 +16,60 @@
     padding: 1.2rem 1rem 2rem;
     color: #222;
   }
+
+  /* ── START SCREEN ── */
+  #start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 340px;
+    margin-top: 3rem;
+    text-align: center;
+    gap: 1.2rem;
+  }
+  #start-screen .logo { font-size: 52px; }
+  #start-screen h1 { font-size: 22px; font-weight: 700; color: #333; }
+  #start-screen p { font-size: 14px; color: #999; }
+  .timer-picker {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+  .timer-opt {
+    flex: 1;
+    padding: 12px 0;
+    border-radius: 12px;
+    border: 1.5px solid #ddd;
+    background: white;
+    font-size: 15px;
+    font-weight: 600;
+    color: #888;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.1s;
+  }
+  .timer-opt.selected {
+    border-color: #7b68d4;
+    color: #7b68d4;
+    background: #f3f0fd;
+  }
+  #start-btn {
+    width: 100%;
+    padding: 16px 0;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    background: #7b68d4;
+    color: white;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+  }
+  #start-btn:active { transform: scale(0.97); }
+
+  /* ── CARD ── */
   .taboo-card {
     width: 100%;
     max-width: 340px;
@@ -34,12 +88,7 @@
     padding: 16px 12px 12px;
     text-align: center;
   }
-  .card-keyword {
-    font-size: 30px;
-    font-weight: 700;
-    color: white;
-    letter-spacing: 0.01em;
-  }
+  .card-keyword { font-size: 30px; font-weight: 700; color: white; }
   .card-taboo-list {
     flex: 1;
     display: flex;
@@ -57,6 +106,8 @@
     margin: 0 20px;
   }
   .card-taboo-list li:last-child { border-bottom: none; }
+
+  /* ── TIMER ── */
   #timer-ring {
     position: relative;
     width: 68px; height: 68px;
@@ -76,6 +127,8 @@
     font-size: 17px; font-weight: 600; color: #555;
   }
   .warn .ring-fg { stroke: #e53935 !important; }
+
+  /* ── TOP BAR ── */
   #top-bar {
     display: flex; justify-content: space-between;
     align-items: center; width: 100%; max-width: 340px;
@@ -86,6 +139,8 @@
     border: 1px solid #e0e0e0; border-radius: 20px; padding: 4px 12px;
   }
   #deck-display { font-size: 13px; color: #999; }
+
+  /* ── BUTTONS ── */
   #next-btn {
     display: none; width: 100%; max-width: 340px;
     padding: 14px 0; border-radius: 14px;
@@ -102,48 +157,78 @@
     flex: 1; padding: 14px 0; border-radius: 14px;
     font-size: 15px; font-weight: 600; cursor: pointer;
     border: none; font-family: inherit;
+    transition: transform 0.08s, opacity 0.1s;
   }
   .act-btn:active { transform: scale(0.95); }
-  .act-btn:disabled { opacity: 0.4; }
   #pass-btn { background: #fff3e0; color: #b36200; }
   #done-btn { background: #e6f4ea; color: #256029; }
-  #skip-btn {
-    background: none; border: none; color: #bbb;
-    font-size: 12px; cursor: pointer; text-decoration: underline;
-    font-family: inherit; margin-bottom: 6px;
-  }
+  .act-btn.flash { opacity: 0.5; }
+
   #reset-btn {
     background: none; border: none; color: #ccc;
     font-size: 12px; cursor: pointer; text-decoration: underline;
-    font-family: inherit; margin-top: 6px;
+    font-family: inherit; margin-top: 8px;
   }
+
+  /* ── SCREENS ── */
   #game-screen {
-    display: flex; flex-direction: column;
+    display: none; flex-direction: column;
     align-items: center; width: 100%;
   }
   #round-done-screen {
     display: none; flex-direction: column;
     align-items: center; width: 100%; max-width: 360px;
-    text-align: center; padding-top: 3rem;
+    text-align: center; padding-top: 3rem; gap: 6px;
   }
-  #round-done-screen .big { font-size: 52px; margin-bottom: 12px; }
-  #round-done-screen h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
-  #round-done-screen p { color: #888; font-size: 14px; margin-bottom: 6px; }
+  #round-done-screen .big { font-size: 52px; margin-bottom: 8px; }
+  #round-done-screen h2 { font-size: 20px; font-weight: 600; }
+  #round-done-screen p { color: #888; font-size: 14px; }
   .round-btn {
     width: 100%; padding: 14px 0; border-radius: 14px;
     font-size: 15px; font-weight: 600; cursor: pointer;
     border: 1.5px solid #ddd; background: white;
-    color: #444; font-family: inherit; margin-top: 12px;
+    color: #444; font-family: inherit; margin-top: 10px;
   }
   .round-btn:active { transform: scale(0.96); }
+
+  /* time's up overlay on card */
+  #timeup-banner {
+    display: none;
+    background: #ffe0e0;
+    color: #c0392b;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 340px;
+    margin-bottom: 10px;
+  }
 </style>
 </head>
 <body>
 
+<!-- START -->
+<div id="start-screen">
+  <div class="logo">🃏</div>
+  <h1>Taboo Cards</h1>
+  <p>72 cards · animals, habitats, travel</p>
+  <div>
+    <p style="font-size:13px; color:#aaa; margin-bottom:8px;">Timer per turn</p>
+    <div class="timer-picker">
+      <button class="timer-opt selected" onclick="selectTimer(1, this)">1 min</button>
+      <button class="timer-opt" onclick="selectTimer(2, this)">2 min</button>
+    </div>
+  </div>
+  <button id="start-btn" onclick="startGame()">Start ▶</button>
+</div>
+
+<!-- GAME -->
 <div id="game-screen">
   <div id="top-bar">
     <div id="score-display">✅ Done: <span id="done-count">0</span></div>
-    <div id="deck-display">Card <span id="card-num">1</span> of <span id="card-total">0</span></div>
+    <div id="deck-display">Card <span id="card-num">1</span> of <span id="card-total">72</span></div>
   </div>
 
   <div id="timer-ring">
@@ -153,6 +238,8 @@
     </svg>
     <div id="timer-label">1:00</div>
   </div>
+
+  <div id="timeup-banner">⏰ Time's up! Hit Next card.</div>
 
   <div class="taboo-card">
     <div class="card-header">
@@ -168,17 +255,17 @@
     <button class="act-btn" id="done-btn" onclick="doneCard()">✓ Done</button>
   </div>
 
-  <button id="skip-btn" onclick="skipTimer()">skip timer</button>
-  <button id="reset-btn" onclick="startGame()">↺ reshuffle all cards</button>
+  <button id="reset-btn" onclick="goToStart()">← back to start</button>
 </div>
 
+<!-- ROUND DONE -->
 <div id="round-done-screen">
   <div class="big">🎉</div>
   <h2>Round complete!</h2>
   <p id="round-summary"></p>
   <p id="pass-note" style="display:none; color:#b36200; font-size:13px;"></p>
   <button class="round-btn" id="next-round-btn" onclick="startNextRound()">Play passed cards again</button>
-  <button class="round-btn" onclick="startGame()" style="color:#bbb; border-color:#eee; font-size:13px; margin-top:4px;">Reshuffle all cards</button>
+  <button class="round-btn" onclick="goToStart()" style="color:#bbb; border-color:#eee; font-size:13px;">Back to start</button>
 </div>
 
 <script>
@@ -259,14 +346,30 @@ const CARDS = [
 
 const CIRC = 2 * Math.PI * 26;
 let deck = [], passedCards = [], doneCount = 0, currentCard = null;
-let timerInterval = null, secondsLeft = 60, actionTaken = false;
+let timerInterval = null, secondsLeft = 60, timerDuration = 60;
+let timerRunning = false;
+
+function selectTimer(mins, btn) {
+  timerDuration = mins * 60;
+  document.querySelectorAll('.timer-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function goToStart() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('round-done-screen').style.display = 'none';
+  document.getElementById('start-screen').style.display = 'flex';
+}
 
 function startGame() {
   doneCount = 0; passedCards = [];
   deck = shuffle([...CARDS]);
   document.getElementById('done-count').textContent = 0;
-  document.getElementById('game-screen').style.display = 'flex';
+  document.getElementById('start-screen').style.display = 'none';
   document.getElementById('round-done-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'flex';
   showNextCard();
 }
 
@@ -285,68 +388,112 @@ function showNextCard() {
   document.getElementById('card-num').textContent = seen;
   document.getElementById('card-total').textContent = CARDS.length;
   document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('timeup-banner').style.display = 'none';
   document.getElementById('pass-btn').disabled = false;
   document.getElementById('done-btn').disabled = false;
-  actionTaken = false;
-  startTimer();
+
+  // Only start timer on first card; subsequent cards within the same turn don't restart it
+  if (!timerRunning) startTimer();
 }
 
 function startTimer() {
   clearInterval(timerInterval);
-  secondsLeft = 60;
+  secondsLeft = timerDuration;
+  timerRunning = true;
   document.getElementById('timer-ring').classList.remove('warn');
   updateTimerDisplay();
   timerInterval = setInterval(() => {
     secondsLeft--;
     updateTimerDisplay();
     if (secondsLeft <= 10) document.getElementById('timer-ring').classList.add('warn');
-    if (secondsLeft <= 0) { clearInterval(timerInterval); timeUp(); }
+    if (secondsLeft <= 0) {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      timeUp();
+    }
   }, 1000);
 }
 
 function updateTimerDisplay() {
   const s = Math.max(0, secondsLeft);
-  document.getElementById('timer-label').textContent =
-    Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
-  document.getElementById('timer-arc').style.strokeDashoffset = CIRC * (1 - s / 60);
+  const mins = Math.floor(s / 60);
+  const secs = s % 60;
+  document.getElementById('timer-label').textContent = mins + ':' + String(secs).padStart(2, '0');
+  document.getElementById('timer-arc').style.strokeDashoffset = CIRC * (1 - s / timerDuration);
 }
 
 function timeUp() {
-  if (!actionTaken) document.getElementById('next-btn').style.display = 'block';
+  document.getElementById('timeup-banner').style.display = 'block';
+  document.getElementById('next-btn').style.display = 'block';
+  document.getElementById('pass-btn').disabled = true;
+  document.getElementById('done-btn').disabled = true;
 }
 
-function skipTimer() {
-  clearInterval(timerInterval); secondsLeft = 0;
-  updateTimerDisplay(); timeUp();
+function flash(btn) {
+  btn.classList.add('flash');
+  setTimeout(() => btn.classList.remove('flash'), 150);
 }
 
 function passCard() {
-  if (actionTaken) return;
-  actionTaken = true;
-  clearInterval(timerInterval);
+  flash(document.getElementById('pass-btn'));
   passedCards.push(currentCard);
-  document.getElementById('pass-btn').disabled = true;
-  document.getElementById('done-btn').disabled = true;
-  document.getElementById('next-btn').style.display = 'block';
+  // show next card immediately, timer keeps running
+  showNextCardSameTurn();
 }
 
 function doneCard() {
-  if (actionTaken) return;
-  actionTaken = true;
-  clearInterval(timerInterval);
+  flash(document.getElementById('done-btn'));
   doneCount++;
   document.getElementById('done-count').textContent = doneCount;
-  document.getElementById('pass-btn').disabled = true;
-  document.getElementById('done-btn').disabled = true;
-  document.getElementById('next-btn').style.display = 'block';
+  showNextCardSameTurn();
+}
+
+function showNextCardSameTurn() {
+  if (deck.length === 0) {
+    // deck empty mid-turn — end round when timer finishes or show next btn now
+    document.getElementById('next-btn').style.display = 'block';
+    document.getElementById('pass-btn').disabled = true;
+    document.getElementById('done-btn').disabled = true;
+    return;
+  }
+  currentCard = deck.shift();
+  document.getElementById('card-keyword').textContent = currentCard.word;
+  const list = document.getElementById('card-taboo-list');
+  list.innerHTML = '';
+  currentCard.taboo.forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    list.appendChild(li);
+  });
+  const seen = CARDS.length - deck.length;
+  document.getElementById('card-num').textContent = seen;
 }
 
 function nextCard() {
+  // between turns — reset timer, show fresh card
+  timerRunning = false;
   document.getElementById('next-btn').style.display = 'none';
-  showNextCard();
+  document.getElementById('timeup-banner').style.display = 'none';
+  document.getElementById('pass-btn').disabled = false;
+  document.getElementById('done-btn').disabled = false;
+  if (deck.length === 0) { endRound(); return; }
+  currentCard = deck.shift();
+  document.getElementById('card-keyword').textContent = currentCard.word;
+  const list = document.getElementById('card-taboo-list');
+  list.innerHTML = '';
+  currentCard.taboo.forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    list.appendChild(li);
+  });
+  const seen = CARDS.length - deck.length;
+  document.getElementById('card-num').textContent = seen;
+  startTimer();
 }
 
 function endRound() {
+  clearInterval(timerInterval);
+  timerRunning = false;
   document.getElementById('game-screen').style.display = 'none';
   document.getElementById('round-done-screen').style.display = 'flex';
   document.getElementById('round-summary').textContent =
@@ -365,6 +512,7 @@ function startNextRound() {
   passedCards = [];
   document.getElementById('round-done-screen').style.display = 'none';
   document.getElementById('game-screen').style.display = 'flex';
+  timerRunning = false;
   showNextCard();
 }
 
@@ -375,8 +523,6 @@ function shuffle(arr) {
   }
   return arr;
 }
-
-startGame();
 </script>
 </body>
 </html>
