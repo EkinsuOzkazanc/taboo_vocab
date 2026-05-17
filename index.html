@@ -24,101 +24,131 @@
     align-items: center;
     width: 100%;
     max-width: 340px;
-    margin-top: 3rem;
-    text-align: center;
-    gap: 1.2rem;
+    margin-top: 2rem;
+    gap: 1.1rem;
   }
-  #start-screen .logo { font-size: 52px; }
+  #start-screen .logo { font-size: 48px; }
   #start-screen h1 { font-size: 22px; font-weight: 700; color: #333; }
-  #start-screen p { font-size: 14px; color: #999; }
-  .timer-picker {
-    display: flex;
-    gap: 10px;
+
+  .section-label {
+    font-size: 12px;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    align-self: flex-start;
+    margin-bottom: -4px;
+  }
+
+  /* deck selection */
+  .deck-list {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
-  .timer-opt {
-    flex: 1;
-    padding: 12px 0;
-    border-radius: 12px;
-    border: 1.5px solid #ddd;
+  .deck-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     background: white;
-    font-size: 15px;
-    font-weight: 600;
-    color: #888;
+    border: 1.5px solid #ddd;
+    border-radius: 12px;
+    padding: 12px 14px;
     cursor: pointer;
-    font-family: inherit;
-    transition: all 0.1s;
+    transition: border-color 0.1s, background 0.1s;
+    user-select: none;
   }
-  .timer-opt.selected {
+  .deck-item.selected {
     border-color: #7b68d4;
-    color: #7b68d4;
     background: #f3f0fd;
   }
-  #start-btn {
-    width: 100%;
-    padding: 16px 0;
-    border-radius: 14px;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    background: #7b68d4;
-    color: white;
-    font-family: inherit;
-    letter-spacing: 0.02em;
+  .deck-check {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    border: 1.5px solid #ccc;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    transition: background 0.1s, border-color 0.1s;
   }
+  .deck-item.selected .deck-check {
+    background: #7b68d4;
+    border-color: #7b68d4;
+    color: white;
+  }
+  .deck-info { flex: 1; }
+  .deck-name { font-size: 15px; font-weight: 600; color: #333; }
+  .deck-meta { font-size: 12px; color: #aaa; margin-top: 2px; }
+
+  .mix-note {
+    font-size: 12px;
+    color: #7b68d4;
+    text-align: center;
+    display: none;
+  }
+
+  /* timer picker */
+  .timer-picker { display: flex; gap: 10px; width: 100%; }
+  .timer-opt {
+    flex: 1; padding: 11px 0;
+    border-radius: 12px; border: 1.5px solid #ddd;
+    background: white; font-size: 15px; font-weight: 600;
+    color: #888; cursor: pointer; font-family: inherit;
+  }
+  .timer-opt.selected { border-color: #7b68d4; color: #7b68d4; background: #f3f0fd; }
+
+  #start-btn {
+    width: 100%; padding: 16px 0; border-radius: 14px;
+    font-size: 17px; font-weight: 700; cursor: pointer;
+    border: none; background: #7b68d4; color: white;
+    font-family: inherit; letter-spacing: 0.02em;
+    opacity: 0.4; pointer-events: none;
+    transition: opacity 0.15s;
+  }
+  #start-btn.ready { opacity: 1; pointer-events: all; }
   #start-btn:active { transform: scale(0.97); }
 
   /* ── CARD ── */
   .taboo-card {
-    width: 100%;
-    max-width: 340px;
-    background: white;
-    border-radius: 16px;
+    width: 100%; max-width: 340px;
+    background: white; border-radius: 16px;
     border: 1px solid #e0e0e0;
     box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    overflow: hidden;
-    margin-bottom: 14px;
-    min-height: 260px;
-    display: flex;
-    flex-direction: column;
+    overflow: hidden; margin-bottom: 14px;
+    min-height: 260px; display: flex; flex-direction: column;
   }
   .card-header {
     background: #a78bdc;
-    padding: 16px 12px 12px;
-    text-align: center;
+    padding: 16px 12px 12px; text-align: center;
+  }
+  .card-deck-tag {
+    font-size: 11px; color: rgba(255,255,255,0.7);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 4px;
   }
   .card-keyword { font-size: 30px; font-weight: 700; color: white; }
   .card-taboo-list {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 10px 0 14px;
-    list-style: none;
-    text-align: center;
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; padding: 10px 0 14px;
+    list-style: none; text-align: center;
   }
   .card-taboo-list li {
-    font-size: 17px;
-    color: #333;
-    padding: 5px 0;
-    border-bottom: 1px solid #f0f0f0;
+    font-size: 17px; color: #333;
+    padding: 5px 0; border-bottom: 1px solid #f0f0f0;
     margin: 0 20px;
   }
   .card-taboo-list li:last-child { border-bottom: none; }
 
   /* ── TIMER ── */
   #timer-ring {
-    position: relative;
-    width: 68px; height: 68px;
+    position: relative; width: 68px; height: 68px;
     margin: 0 auto 10px;
   }
   #timer-ring svg { transform: rotate(-90deg); }
   .ring-bg { fill: none; stroke: #e8e8e8; stroke-width: 5; }
   .ring-fg {
     fill: none; stroke: #7b68d4; stroke-width: 5;
-    stroke-linecap: round;
-    stroke-dasharray: 163; stroke-dashoffset: 0;
+    stroke-linecap: round; stroke-dasharray: 163; stroke-dashoffset: 0;
     transition: stroke-dashoffset 1s linear, stroke 0.3s;
   }
   #timer-label {
@@ -140,7 +170,7 @@
   }
   #deck-display { font-size: 13px; color: #999; }
 
-  /* ── BUTTONS ── */
+  /* ── GAME BUTTONS ── */
   #next-btn {
     display: none; width: 100%; max-width: 340px;
     padding: 14px 0; border-radius: 14px;
@@ -156,18 +186,22 @@
   .act-btn {
     flex: 1; padding: 14px 0; border-radius: 14px;
     font-size: 15px; font-weight: 600; cursor: pointer;
-    border: none; font-family: inherit;
-    transition: transform 0.08s, opacity 0.1s;
+    border: none; font-family: inherit; transition: opacity 0.1s;
   }
   .act-btn:active { transform: scale(0.95); }
   #pass-btn { background: #fff3e0; color: #b36200; }
   #done-btn { background: #e6f4ea; color: #256029; }
-  .act-btn.flash { opacity: 0.5; }
-
+  .act-btn.flash { opacity: 0.4; }
   #reset-btn {
     background: none; border: none; color: #ccc;
     font-size: 12px; cursor: pointer; text-decoration: underline;
     font-family: inherit; margin-top: 8px;
+  }
+  #timeup-banner {
+    display: none; background: #ffe0e0; color: #c0392b;
+    text-align: center; font-size: 14px; font-weight: 600;
+    padding: 8px; border-radius: 10px;
+    width: 100%; max-width: 340px; margin-bottom: 10px;
   }
 
   /* ── SCREENS ── */
@@ -190,45 +224,33 @@
     color: #444; font-family: inherit; margin-top: 10px;
   }
   .round-btn:active { transform: scale(0.96); }
-
-  /* time's up overlay on card */
-  #timeup-banner {
-    display: none;
-    background: #ffe0e0;
-    color: #c0392b;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 8px;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 340px;
-    margin-bottom: 10px;
-  }
 </style>
 </head>
 <body>
 
-<!-- START -->
+<!-- START SCREEN -->
 <div id="start-screen">
   <div class="logo">🃏</div>
   <h1>Taboo Cards</h1>
-  <p>72 cards · animals, habitats, travel</p>
-  <div>
-    <p style="font-size:13px; color:#aaa; margin-bottom:8px;">Timer per turn</p>
-    <div class="timer-picker">
-      <button class="timer-opt selected" onclick="selectTimer(1, this)">1 min</button>
-      <button class="timer-opt" onclick="selectTimer(2, this)">2 min</button>
-    </div>
+
+  <span class="section-label">Select deck(s)</span>
+  <div class="deck-list" id="deck-list"></div>
+  <div class="mix-note" id="mix-note">Cards from all selected decks will be shuffled together.</div>
+
+  <span class="section-label">Timer per turn</span>
+  <div class="timer-picker">
+    <button class="timer-opt selected" onclick="selectTimer(1, this)">1 min</button>
+    <button class="timer-opt" onclick="selectTimer(2, this)">2 min</button>
   </div>
+
   <button id="start-btn" onclick="startGame()">Start ▶</button>
 </div>
 
-<!-- GAME -->
+<!-- GAME SCREEN -->
 <div id="game-screen">
   <div id="top-bar">
     <div id="score-display">✅ Done: <span id="done-count">0</span></div>
-    <div id="deck-display">Card <span id="card-num">1</span> of <span id="card-total">72</span></div>
+    <div id="deck-display">Card <span id="card-num">1</span> of <span id="card-total">0</span></div>
   </div>
 
   <div id="timer-ring">
@@ -243,6 +265,7 @@
 
   <div class="taboo-card">
     <div class="card-header">
+      <div class="card-deck-tag" id="card-deck-tag"></div>
       <div class="card-keyword" id="card-keyword"></div>
     </div>
     <ul class="card-taboo-list" id="card-taboo-list"></ul>
@@ -258,7 +281,7 @@
   <button id="reset-btn" onclick="goToStart()">← back to start</button>
 </div>
 
-<!-- ROUND DONE -->
+<!-- ROUND DONE SCREEN -->
 <div id="round-done-screen">
   <div class="big">🎉</div>
   <h2>Round complete!</h2>
@@ -269,85 +292,133 @@
 </div>
 
 <script>
-const CARDS = [
-  { word: "bird", taboo: ["fly", "wing", "feather", "nest", "animal"] },
-  { word: "insect", taboo: ["bug", "small", "ant", "fly", "legs"] },
-  { word: "reptile", taboo: ["snake", "cold", "lizard", "scales", "animal"] },
-  { word: "mammal", taboo: ["animal", "warm", "fur", "baby", "human"] },
-  { word: "wild", taboo: ["nature", "free", "jungle", "tame", "animal"] },
-  { word: "huge", taboo: ["big", "large", "giant", "size", "very"] },
-  { word: "enormous", taboo: ["big", "huge", "large", "giant", "great"] },
-  { word: "furry", taboo: ["hair", "soft", "animal", "fluffy", "touch"] },
-  { word: "quiet", taboo: ["silent", "noise", "loud", "sound", "speak"] },
-  { word: "scary", taboo: ["afraid", "fear", "danger", "horror", "dark"] },
-  { word: "quick", taboo: ["fast", "speed", "slow", "run", "move"] },
-  { word: "strong", taboo: ["power", "weak", "muscle", "heavy", "force"] },
-  { word: "dangerous", taboo: ["safe", "hurt", "careful", "harm", "risk"] },
-  { word: "fast", taboo: ["quick", "speed", "slow", "run", "move"] },
-  { word: "slow", taboo: ["fast", "speed", "move", "turtle", "quick"] },
-  { word: "tail", taboo: ["animal", "back", "dog", "wag", "end"] },
-  { word: "tusk", taboo: ["elephant", "tooth", "long", "white", "point"] },
-  { word: "paw", taboo: ["foot", "dog", "cat", "animal", "claw"] },
-  { word: "wing", taboo: ["fly", "bird", "feather", "arm", "air"] },
-  { word: "bear", taboo: ["animal", "forest", "big", "honey", "fur"] },
-  { word: "lion", taboo: ["cat", "Africa", "roar", "mane", "animal"] },
-  { word: "tiger", taboo: ["stripes", "cat", "India", "jungle", "animal"] },
-  { word: "wolf", taboo: ["dog", "forest", "howl", "pack", "wild"] },
-  { word: "giraffe", taboo: ["tall", "neck", "Africa", "spots", "animal"] },
-  { word: "monkey", taboo: ["tree", "banana", "jump", "jungle", "animal"] },
-  { word: "elephant", taboo: ["big", "trunk", "tusk", "Africa", "animal"] },
-  { word: "zebra", taboo: ["stripes", "horse", "Africa", "black", "white"] },
-  { word: "penguin", taboo: ["bird", "cold", "ice", "swim", "black"] },
-  { word: "parrot", taboo: ["bird", "talk", "colour", "feather", "fly"] },
-  { word: "snake", taboo: ["long", "reptile", "bite", "no legs", "hiss"] },
-  { word: "crocodile", taboo: ["reptile", "teeth", "river", "green", "bite"] },
-  { word: "gorilla", taboo: ["monkey", "big", "Africa", "jungle", "strong"] },
-  { word: "leopard", taboo: ["spots", "cat", "Africa", "fast", "jungle"] },
-  { word: "whale", taboo: ["ocean", "big", "mammal", "swim", "blue"] },
-  { word: "eagle", taboo: ["bird", "fly", "mountain", "wing", "big"] },
-  { word: "shark", taboo: ["fish", "ocean", "teeth", "swim", "danger"] },
-  { word: "seal", taboo: ["ocean", "fish", "swim", "cold", "fur"] },
-  { word: "seagull", taboo: ["bird", "sea", "fly", "white", "beach"] },
-  { word: "farm", taboo: ["animal", "field", "food", "cow", "country"] },
-  { word: "field", taboo: ["grass", "open", "farm", "green", "flat"] },
-  { word: "forest", taboo: ["tree", "wood", "green", "animal", "dark"] },
-  { word: "jungle", taboo: ["tree", "hot", "animal", "green", "tropical"] },
-  { word: "river", taboo: ["water", "flow", "fish", "lake", "long"] },
-  { word: "coast", taboo: ["sea", "beach", "water", "land", "cliff"] },
-  { word: "savanna", taboo: ["Africa", "grass", "flat", "lion", "dry"] },
-  { word: "ocean", taboo: ["sea", "water", "big", "fish", "blue"] },
-  { word: "sky", taboo: ["blue", "cloud", "above", "air", "high"] },
-  { word: "national park", taboo: ["nature", "animals", "wild", "trees", "visit"] },
-  { word: "climate", taboo: ["weather", "hot", "cold", "temperature", "season"] },
-  { word: "continent", taboo: ["Africa", "land", "map", "country", "big"] },
-  { word: "desert", taboo: ["sand", "hot", "dry", "camel", "water"] },
-  { word: "valley", taboo: ["mountain", "low", "river", "between", "hill"] },
-  { word: "lake", taboo: ["water", "fish", "swim", "river", "round"] },
-  { word: "rock", taboo: ["stone", "hard", "mountain", "grey", "heavy"] },
-  { word: "season", taboo: ["summer", "winter", "weather", "spring", "autumn"] },
-  { word: "temperature", taboo: ["hot", "cold", "weather", "degree", "climate"] },
-  { word: "sand dune", taboo: ["sand", "desert", "hill", "wind", "shape"] },
-  { word: "coral reef", taboo: ["ocean", "fish", "colour", "underwater", "sea"] },
-  { word: "canyon", taboo: ["rock", "deep", "valley", "river", "America"] },
-  { word: "island", taboo: ["sea", "water", "land", "beach", "small"] },
-  { word: "tower", taboo: ["tall", "building", "high", "city", "climb"] },
-  { word: "tour", taboo: ["travel", "visit", "trip", "group", "guide"] },
-  { word: "journey", taboo: ["travel", "trip", "long", "go", "road"] },
-  { word: "trip", taboo: ["travel", "journey", "holiday", "visit", "go"] },
-  { word: "sightseeing", taboo: ["tourist", "visit", "travel", "city", "look"] },
-  { word: "beach", taboo: ["sand", "sea", "swim", "holiday", "sun"] },
-  { word: "museum", taboo: ["art", "history", "visit", "building", "old"] },
-  { word: "zoo", taboo: ["animal", "visit", "cage", "wild", "park"] },
-  { word: "amusement park", taboo: ["ride", "fun", "children", "roller", "theme"] },
-  { word: "view", taboo: ["see", "look", "scenery", "beautiful", "window"] },
-  { word: "bridge", taboo: ["river", "cross", "road", "water", "over"] },
-  { word: "seaside", taboo: ["sea", "beach", "holiday", "coast", "water"] }
+// ── DECKS ──────────────────────────────────────────────────────────────────
+// To add a new deck: copy the structure below and add it to the DECKS array.
+const DECKS = [
+  {
+    id: "meb7",
+    name: "MEB 7",
+    description: "Animals, habitats & travel",
+    cards: [
+      { word: "bird", taboo: ["fly", "wing", "feather", "nest", "animal"] },
+      { word: "insect", taboo: ["bug", "small", "ant", "fly", "legs"] },
+      { word: "reptile", taboo: ["snake", "cold", "lizard", "scales", "animal"] },
+      { word: "mammal", taboo: ["animal", "warm", "fur", "baby", "human"] },
+      { word: "wild", taboo: ["nature", "free", "jungle", "tame", "animal"] },
+      { word: "huge", taboo: ["big", "large", "giant", "size", "very"] },
+      { word: "enormous", taboo: ["big", "huge", "large", "giant", "great"] },
+      { word: "furry", taboo: ["hair", "soft", "animal", "fluffy", "touch"] },
+      { word: "quiet", taboo: ["silent", "noise", "loud", "sound", "speak"] },
+      { word: "scary", taboo: ["afraid", "fear", "danger", "horror", "dark"] },
+      { word: "quick", taboo: ["fast", "speed", "slow", "run", "move"] },
+      { word: "strong", taboo: ["power", "weak", "muscle", "heavy", "force"] },
+      { word: "dangerous", taboo: ["safe", "hurt", "careful", "harm", "risk"] },
+      { word: "fast", taboo: ["quick", "speed", "slow", "run", "move"] },
+      { word: "slow", taboo: ["fast", "speed", "move", "turtle", "quick"] },
+      { word: "tail", taboo: ["animal", "back", "dog", "wag", "end"] },
+      { word: "tusk", taboo: ["elephant", "tooth", "long", "white", "point"] },
+      { word: "paw", taboo: ["foot", "dog", "cat", "animal", "claw"] },
+      { word: "wing", taboo: ["fly", "bird", "feather", "arm", "air"] },
+      { word: "bear", taboo: ["animal", "forest", "big", "honey", "fur"] },
+      { word: "lion", taboo: ["cat", "Africa", "roar", "mane", "animal"] },
+      { word: "tiger", taboo: ["stripes", "cat", "India", "jungle", "animal"] },
+      { word: "wolf", taboo: ["dog", "forest", "howl", "pack", "wild"] },
+      { word: "giraffe", taboo: ["tall", "neck", "Africa", "spots", "animal"] },
+      { word: "monkey", taboo: ["tree", "banana", "jump", "jungle", "animal"] },
+      { word: "elephant", taboo: ["big", "trunk", "tusk", "Africa", "animal"] },
+      { word: "zebra", taboo: ["stripes", "horse", "Africa", "black", "white"] },
+      { word: "penguin", taboo: ["bird", "cold", "ice", "swim", "black"] },
+      { word: "parrot", taboo: ["bird", "talk", "colour", "feather", "fly"] },
+      { word: "snake", taboo: ["long", "reptile", "bite", "no legs", "hiss"] },
+      { word: "crocodile", taboo: ["reptile", "teeth", "river", "green", "bite"] },
+      { word: "gorilla", taboo: ["monkey", "big", "Africa", "jungle", "strong"] },
+      { word: "leopard", taboo: ["spots", "cat", "Africa", "fast", "jungle"] },
+      { word: "whale", taboo: ["ocean", "big", "mammal", "swim", "blue"] },
+      { word: "eagle", taboo: ["bird", "fly", "mountain", "wing", "big"] },
+      { word: "shark", taboo: ["fish", "ocean", "teeth", "swim", "danger"] },
+      { word: "seal", taboo: ["ocean", "fish", "swim", "cold", "fur"] },
+      { word: "seagull", taboo: ["bird", "sea", "fly", "white", "beach"] },
+      { word: "farm", taboo: ["animal", "field", "food", "cow", "country"] },
+      { word: "field", taboo: ["grass", "open", "farm", "green", "flat"] },
+      { word: "forest", taboo: ["tree", "wood", "green", "animal", "dark"] },
+      { word: "jungle", taboo: ["tree", "hot", "animal", "green", "tropical"] },
+      { word: "river", taboo: ["water", "flow", "fish", "lake", "long"] },
+      { word: "coast", taboo: ["sea", "beach", "water", "land", "cliff"] },
+      { word: "savanna", taboo: ["Africa", "grass", "flat", "lion", "dry"] },
+      { word: "ocean", taboo: ["sea", "water", "big", "fish", "blue"] },
+      { word: "sky", taboo: ["blue", "cloud", "above", "air", "high"] },
+      { word: "national park", taboo: ["nature", "animals", "wild", "trees", "visit"] },
+      { word: "climate", taboo: ["weather", "hot", "cold", "temperature", "season"] },
+      { word: "continent", taboo: ["Africa", "land", "map", "country", "big"] },
+      { word: "desert", taboo: ["sand", "hot", "dry", "camel", "water"] },
+      { word: "valley", taboo: ["mountain", "low", "river", "between", "hill"] },
+      { word: "lake", taboo: ["water", "fish", "swim", "river", "round"] },
+      { word: "rock", taboo: ["stone", "hard", "mountain", "grey", "heavy"] },
+      { word: "season", taboo: ["summer", "winter", "weather", "spring", "autumn"] },
+      { word: "temperature", taboo: ["hot", "cold", "weather", "degree", "climate"] },
+      { word: "sand dune", taboo: ["sand", "desert", "hill", "wind", "shape"] },
+      { word: "coral reef", taboo: ["ocean", "fish", "colour", "underwater", "sea"] },
+      { word: "canyon", taboo: ["rock", "deep", "valley", "river", "America"] },
+      { word: "island", taboo: ["sea", "water", "land", "beach", "small"] },
+      { word: "tower", taboo: ["tall", "building", "high", "city", "climb"] },
+      { word: "tour", taboo: ["travel", "visit", "trip", "group", "guide"] },
+      { word: "journey", taboo: ["travel", "trip", "long", "go", "road"] },
+      { word: "trip", taboo: ["travel", "journey", "holiday", "visit", "go"] },
+      { word: "sightseeing", taboo: ["tourist", "visit", "travel", "city", "look"] },
+      { word: "beach", taboo: ["sand", "sea", "swim", "holiday", "sun"] },
+      { word: "museum", taboo: ["art", "history", "visit", "building", "old"] },
+      { word: "zoo", taboo: ["animal", "visit", "cage", "wild", "park"] },
+      { word: "amusement park", taboo: ["ride", "fun", "children", "roller", "theme"] },
+      { word: "view", taboo: ["see", "look", "scenery", "beautiful", "window"] },
+      { word: "bridge", taboo: ["river", "cross", "road", "water", "over"] },
+      { word: "seaside", taboo: ["sea", "beach", "holiday", "coast", "water"] }
+    ]
+  }
+  // ── ADD NEW DECKS HERE ──
 ];
 
+// ── STATE ──────────────────────────────────────────────────────────────────
 const CIRC = 2 * Math.PI * 26;
+let selectedDeckIds = [];
+let timerDuration = 60;
 let deck = [], passedCards = [], doneCount = 0, currentCard = null;
-let timerInterval = null, secondsLeft = 60, timerDuration = 60;
-let timerRunning = false;
+let timerInterval = null, secondsLeft = 60, timerRunning = false;
+let totalCards = 0;
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+function init() {
+  const list = document.getElementById('deck-list');
+  list.innerHTML = '';
+  DECKS.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'deck-item';
+    el.dataset.id = d.id;
+    el.innerHTML = `
+      <div class="deck-check"></div>
+      <div class="deck-info">
+        <div class="deck-name">${d.name}</div>
+        <div class="deck-meta">${d.cards.length} cards · ${d.description}</div>
+      </div>`;
+    el.addEventListener('click', () => toggleDeck(d.id, el));
+    list.appendChild(el);
+  });
+}
+
+function toggleDeck(id, el) {
+  if (selectedDeckIds.includes(id)) {
+    selectedDeckIds = selectedDeckIds.filter(x => x !== id);
+    el.classList.remove('selected');
+    el.querySelector('.deck-check').textContent = '';
+  } else {
+    selectedDeckIds.push(id);
+    el.classList.add('selected');
+    el.querySelector('.deck-check').textContent = '✓';
+  }
+  const btn = document.getElementById('start-btn');
+  const note = document.getElementById('mix-note');
+  btn.classList.toggle('ready', selectedDeckIds.length > 0);
+  note.style.display = selectedDeckIds.length > 1 ? 'block' : 'none';
+}
 
 function selectTimer(mins, btn) {
   timerDuration = mins * 60;
@@ -355,45 +426,50 @@ function selectTimer(mins, btn) {
   btn.classList.add('selected');
 }
 
-function goToStart() {
-  clearInterval(timerInterval);
-  timerRunning = false;
-  document.getElementById('game-screen').style.display = 'none';
-  document.getElementById('round-done-screen').style.display = 'none';
-  document.getElementById('start-screen').style.display = 'flex';
-}
-
+// ── GAME ───────────────────────────────────────────────────────────────────
 function startGame() {
+  if (selectedDeckIds.length === 0) return;
   doneCount = 0; passedCards = [];
-  deck = shuffle([...CARDS]);
+  const combined = [];
+  selectedDeckIds.forEach(id => {
+    const d = DECKS.find(x => x.id === id);
+    if (d) d.cards.forEach(c => combined.push({ ...c, deckName: d.name }));
+  });
+  totalCards = combined.length;
+  deck = shuffle(combined);
   document.getElementById('done-count').textContent = 0;
+  document.getElementById('card-total').textContent = totalCards;
   document.getElementById('start-screen').style.display = 'none';
   document.getElementById('round-done-screen').style.display = 'none';
   document.getElementById('game-screen').style.display = 'flex';
+  timerRunning = false;
   showNextCard();
 }
 
 function showNextCard() {
   if (deck.length === 0) { endRound(); return; }
   currentCard = deck.shift();
-  document.getElementById('card-keyword').textContent = currentCard.word;
-  const list = document.getElementById('card-taboo-list');
-  list.innerHTML = '';
-  currentCard.taboo.forEach(t => {
-    const li = document.createElement('li');
-    li.textContent = t;
-    list.appendChild(li);
-  });
-  const seen = CARDS.length - deck.length;
-  document.getElementById('card-num').textContent = seen;
-  document.getElementById('card-total').textContent = CARDS.length;
+  renderCard(currentCard);
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('timeup-banner').style.display = 'none';
   document.getElementById('pass-btn').disabled = false;
   document.getElementById('done-btn').disabled = false;
-
-  // Only start timer on first card; subsequent cards within the same turn don't restart it
   if (!timerRunning) startTimer();
+}
+
+function renderCard(card) {
+  document.getElementById('card-keyword').textContent = card.word;
+  document.getElementById('card-deck-tag').textContent =
+    selectedDeckIds.length > 1 ? card.deckName : '';
+  const list = document.getElementById('card-taboo-list');
+  list.innerHTML = '';
+  card.taboo.forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    list.appendChild(li);
+  });
+  const seen = totalCards - deck.length;
+  document.getElementById('card-num').textContent = seen;
 }
 
 function startTimer() {
@@ -416,10 +492,10 @@ function startTimer() {
 
 function updateTimerDisplay() {
   const s = Math.max(0, secondsLeft);
-  const mins = Math.floor(s / 60);
-  const secs = s % 60;
-  document.getElementById('timer-label').textContent = mins + ':' + String(secs).padStart(2, '0');
-  document.getElementById('timer-arc').style.strokeDashoffset = CIRC * (1 - s / timerDuration);
+  document.getElementById('timer-label').textContent =
+    Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  document.getElementById('timer-arc').style.strokeDashoffset =
+    CIRC * (1 - s / timerDuration);
 }
 
 function timeUp() {
@@ -437,7 +513,6 @@ function flash(btn) {
 function passCard() {
   flash(document.getElementById('pass-btn'));
   passedCards.push(currentCard);
-  // show next card immediately, timer keeps running
   showNextCardSameTurn();
 }
 
@@ -450,27 +525,16 @@ function doneCard() {
 
 function showNextCardSameTurn() {
   if (deck.length === 0) {
-    // deck empty mid-turn — end round when timer finishes or show next btn now
     document.getElementById('next-btn').style.display = 'block';
     document.getElementById('pass-btn').disabled = true;
     document.getElementById('done-btn').disabled = true;
     return;
   }
   currentCard = deck.shift();
-  document.getElementById('card-keyword').textContent = currentCard.word;
-  const list = document.getElementById('card-taboo-list');
-  list.innerHTML = '';
-  currentCard.taboo.forEach(t => {
-    const li = document.createElement('li');
-    li.textContent = t;
-    list.appendChild(li);
-  });
-  const seen = CARDS.length - deck.length;
-  document.getElementById('card-num').textContent = seen;
+  renderCard(currentCard);
 }
 
 function nextCard() {
-  // between turns — reset timer, show fresh card
   timerRunning = false;
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('timeup-banner').style.display = 'none';
@@ -478,22 +542,12 @@ function nextCard() {
   document.getElementById('done-btn').disabled = false;
   if (deck.length === 0) { endRound(); return; }
   currentCard = deck.shift();
-  document.getElementById('card-keyword').textContent = currentCard.word;
-  const list = document.getElementById('card-taboo-list');
-  list.innerHTML = '';
-  currentCard.taboo.forEach(t => {
-    const li = document.createElement('li');
-    li.textContent = t;
-    list.appendChild(li);
-  });
-  const seen = CARDS.length - deck.length;
-  document.getElementById('card-num').textContent = seen;
+  renderCard(currentCard);
   startTimer();
 }
 
 function endRound() {
-  clearInterval(timerInterval);
-  timerRunning = false;
+  clearInterval(timerInterval); timerRunning = false;
   document.getElementById('game-screen').style.display = 'none';
   document.getElementById('round-done-screen').style.display = 'flex';
   document.getElementById('round-summary').textContent =
@@ -503,17 +557,27 @@ function endRound() {
   const note = document.getElementById('pass-note');
   if (hasPass) {
     note.style.display = 'block';
-    note.textContent = passedCards.length + ' passed card' + (passedCards.length > 1 ? 's' : '') + ' will be reshuffled.';
+    note.textContent = passedCards.length + ' passed card' +
+      (passedCards.length > 1 ? 's' : '') + ' will be reshuffled.';
   } else { note.style.display = 'none'; }
 }
 
 function startNextRound() {
   deck = shuffle([...passedCards]);
+  totalCards = deck.length;
   passedCards = [];
+  document.getElementById('card-total').textContent = totalCards;
   document.getElementById('round-done-screen').style.display = 'none';
   document.getElementById('game-screen').style.display = 'flex';
   timerRunning = false;
   showNextCard();
+}
+
+function goToStart() {
+  clearInterval(timerInterval); timerRunning = false;
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('round-done-screen').style.display = 'none';
+  document.getElementById('start-screen').style.display = 'flex';
 }
 
 function shuffle(arr) {
@@ -523,6 +587,8 @@ function shuffle(arr) {
   }
   return arr;
 }
+
+init();
 </script>
 </body>
 </html>
