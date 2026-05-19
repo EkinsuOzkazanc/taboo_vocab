@@ -167,6 +167,49 @@
     background: white; color: #444; font-family: inherit; margin-top: 10px;
   }
   .round-btn:active { transform: scale(0.96); }
+
+  /* passed words list */
+  #passed-words-box {
+    width: 100%; background: #fffbf0; border: 1.5px solid #ffe0a0;
+    border-radius: 14px; padding: 14px 16px; margin-top: 14px; text-align: left;
+  }
+  #passed-words-box h3 { font-size: 13px; color: #b36200; text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 10px; }
+  #passed-words-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  #passed-words-list span {
+    background: white; border: 1px solid #ffd080; border-radius: 20px;
+    padding: 4px 12px; font-size: 14px; color: #333;
+  }
+
+  /* custom deck panel */
+  #custom-deck-toggle {
+    background: none; border: none; color: #7b68d4; font-size: 13px;
+    cursor: pointer; text-decoration: underline; font-family: inherit;
+    align-self: flex-start; margin-top: -4px;
+  }
+  #custom-deck-panel {
+    display: none; width: 100%; background: white; border: 1.5px solid #e0d8f8;
+    border-radius: 14px; padding: 14px; gap: 10px; flex-direction: column;
+  }
+  #custom-deck-panel input, #custom-deck-panel textarea {
+    width: 100%; border: 1.5px solid #ddd; border-radius: 10px;
+    padding: 10px 12px; font-size: 14px; font-family: inherit; color: #333;
+    outline: none; resize: vertical;
+  }
+  #custom-deck-panel input:focus, #custom-deck-panel textarea:focus { border-color: #7b68d4; }
+  #custom-deck-panel textarea { min-height: 120px; line-height: 1.6; }
+  .custom-format-hint {
+    font-size: 11px; color: #aaa; line-height: 1.6;
+    background: #f8f8f8; border-radius: 8px; padding: 8px 10px;
+  }
+  .custom-format-hint code { font-family: monospace; color: #7b68d4; }
+  #add-custom-btn {
+    width: 100%; padding: 12px 0; border-radius: 12px; font-size: 15px;
+    font-weight: 700; cursor: pointer; border: none;
+    background: #7b68d4; color: white; font-family: inherit;
+  }
+  #add-custom-btn:active { transform: scale(0.97); }
+  #custom-error { font-size: 12px; color: #e53935; display: none; }
 </style>
 </head>
 <body>
@@ -177,6 +220,23 @@
   <span class="section-label">Select deck(s)</span>
   <div class="deck-list" id="deck-list"></div>
   <div class="mix-note" id="mix-note">Cards from all selected decks will be shuffled together.</div>
+
+  <button id="custom-deck-toggle" onclick="toggleCustomPanel()">+ Add custom deck</button>
+  <p style="font-size:12px; color:#bbb; align-self:flex-start; margin-top:-6px; line-height:1.5;">
+    Paste cards in <code style="color:#a78bdc;">word | t1, t2, t3, t4, t5</code> format — one per line.<br>
+    Ask Claude to generate cards in this format from any word list.
+  </p>
+  <div id="custom-deck-panel">
+    <input type="text" id="custom-deck-name" placeholder="Deck name (e.g. Theme 9)" maxlength="30" />
+    <textarea id="custom-deck-input" placeholder="volcano | lava, erupt, hot, mountain, rock&#10;rainbow | colour, rain, sky, arc, sun&#10;...one word per line"></textarea>
+    <div class="custom-format-hint">
+      Format: <code>keyword | taboo1, taboo2, taboo3, taboo4, taboo5</code><br>
+      One card per line. Need cards generated? Ask Claude: <em>"Give me taboo cards for these words in this format: word | t1, t2, t3, t4, t5"</em>
+    </div>
+    <div id="custom-error"></div>
+    <button id="add-custom-btn" onclick="addCustomDeck()">Add deck</button>
+  </div>
+
   <span class="section-label">Timer per turn</span>
   <div class="timer-picker">
     <button class="timer-opt selected" onclick="selectTimer(1, this)">1 min</button>
@@ -228,6 +288,10 @@
   <h2>Round complete!</h2>
   <p id="round-summary"></p>
   <p id="pass-note" style="display:none; color:#b36200; font-size:13px;"></p>
+  <div id="passed-words-box" style="display:none;">
+    <h3>↩ Passed words</h3>
+    <div id="passed-words-list"></div>
+  </div>
   <button class="round-btn" id="next-round-btn" onclick="startNextRound()">Play passed cards again</button>
   <button class="round-btn" onclick="goToStart()" style="color:#bbb; border-color:#eee; font-size:13px;">Back to start</button>
 </div>
@@ -636,6 +700,21 @@ function endRound() {
   const note = document.getElementById('pass-note');
   note.style.display = hasPass ? 'block' : 'none';
   if (hasPass) note.textContent = passedCards.length + ' passed card' + (passedCards.length > 1 ? 's' : '') + ' will be reshuffled.';
+
+  // passed words list
+  const box = document.getElementById('passed-words-box');
+  const list = document.getElementById('passed-words-list');
+  if (hasPass) {
+    list.innerHTML = '';
+    passedCards.forEach(c => {
+      const span = document.createElement('span');
+      span.textContent = c.word;
+      list.appendChild(span);
+    });
+    box.style.display = 'block';
+  } else {
+    box.style.display = 'none';
+  }
 }
 
 function startNextRound() {
@@ -652,6 +731,49 @@ function goToStart() {
   document.getElementById('game-screen').style.display = 'none';
   document.getElementById('round-done-screen').style.display = 'none';
   document.getElementById('start-screen').style.display = 'flex';
+}
+
+// ── CUSTOM DECK ────────────────────────────────────────────────────────────
+function toggleCustomPanel() {
+  const panel = document.getElementById('custom-deck-panel');
+  const isOpen = panel.style.display === 'flex';
+  panel.style.display = isOpen ? 'none' : 'flex';
+  document.getElementById('custom-deck-toggle').textContent = isOpen ? '+ Add custom deck' : '− Cancel';
+}
+
+function addCustomDeck() {
+  const nameEl = document.getElementById('custom-deck-name');
+  const inputEl = document.getElementById('custom-deck-input');
+  const errorEl = document.getElementById('custom-error');
+  errorEl.style.display = 'none';
+
+  const name = nameEl.value.trim();
+  if (!name) { showCustomError('Please enter a deck name.'); return; }
+
+  const lines = inputEl.value.trim().split('\n').filter(l => l.trim());
+  if (!lines.length) { showCustomError('Please enter at least one card.'); return; }
+
+  const cards = [];
+  for (let i = 0; i < lines.length; i++) {
+    const parts = lines[i].split('|');
+    if (parts.length !== 2) { showCustomError(`Line ${i+1}: use format  word | t1, t2, t3, t4, t5`); return; }
+    const word = parts[0].trim();
+    const taboo = parts[1].split(',').map(t => t.trim()).filter(Boolean);
+    if (!word) { showCustomError(`Line ${i+1}: keyword is empty.`); return; }
+    if (taboo.length < 1) { showCustomError(`Line ${i+1}: add at least one taboo word.`); return; }
+    cards.push({ word, taboo });
+  }
+
+  const id = 'custom_' + Date.now();
+  DECKS.push({ id, name, description: cards.length + ' custom cards', cards });
+  nameEl.value = ''; inputEl.value = '';
+  toggleCustomPanel();
+  init(); // re-render deck list
+}
+
+function showCustomError(msg) {
+  const el = document.getElementById('custom-error');
+  el.textContent = msg; el.style.display = 'block';
 }
 
 function shuffle(arr) {
