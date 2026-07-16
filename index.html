@@ -235,6 +235,18 @@
     </div>
     <div id="custom-error"></div>
     <button id="add-custom-btn" onclick="addCustomDeck()">Add deck</button>
+
+    <div style="display:flex; align-items:center; gap:8px; margin:2px 0; color:#ccc; font-size:12px;">
+      <div style="flex:1; height:1px; background:#eee;"></div>or<div style="flex:1; height:1px; background:#eee;"></div>
+    </div>
+    <label for="custom-deck-csv" style="width:100%; padding:12px 0; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; border:1.5px solid #ddd; background:white; color:#7b68d4; font-family:inherit; text-align:center; display:block;">
+      📄 Upload CSV / Excel file
+      <input type="file" id="custom-deck-csv" accept=".csv,.txt" style="display:none;" onchange="handleCustomCSV(event)">
+    </label>
+    <div class="custom-format-hint">
+      CSV format: no header row. Column A = keyword, columns B–F = up to 5 taboo words (one per column).<br>
+      In Excel: <em>File → Save As → CSV UTF-8</em>. Enter the deck name above first, then upload.
+    </div>
   </div>
 
   <span class="section-label">Timer per turn</span>
@@ -300,7 +312,7 @@
 const DECKS = [
   {
     id: "theme5",
-    name: "Theme 5",
+    name: "MEB 5th Grade Theme 5",
     description: "Community & technology",
     cards: [
       // NOUNS — community
@@ -353,7 +365,7 @@ const DECKS = [
   },
   {
     id: "theme6",
-    name: "Theme 6",
+    name: "MEB 5th Grade Theme 6",
     description: "Food & restaurants",
     cards: [
       // FOOD NOUNS
@@ -419,7 +431,7 @@ const DECKS = [
   },
   {
     id: "theme7",
-    name: "Theme 7",
+    name: "MEB 5th Grade Theme 7",
     description: "Animals & habitats",
     cards: [
       { word: "bird", taboo: ["fly", "wing", "feather", "nest", "animal"] },
@@ -478,7 +490,7 @@ const DECKS = [
   },
   {
     id: "theme8",
-    name: "Theme 8",
+    name: "MEB 5th Grade Theme 8",
     description: "Geography & travel",
     cards: [
       // GEOGRAPHY
@@ -751,7 +763,7 @@ function addCustomDeck() {
   if (!name) { showCustomError('Please enter a deck name.'); return; }
 
   const lines = inputEl.value.trim().split('\n').filter(l => l.trim());
-  if (!lines.length) { showCustomError('Please enter at least one card.'); return; }
+  if (!lines.length) { showCustomError('Please enter at least one card, or upload a CSV instead.'); return; }
 
   const cards = [];
   for (let i = 0; i < lines.length; i++) {
@@ -764,9 +776,55 @@ function addCustomDeck() {
     cards.push({ word, taboo });
   }
 
+  finalizeCustomDeck(name, cards);
+}
+
+function parseCSVLine(line) {
+  const fields = []; let cur = '', inQuote = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuote && line[i+1] === '"') { cur += '"'; i++; }
+      else inQuote = !inQuote;
+    } else if (ch === ',' && !inQuote) { fields.push(cur.trim()); cur = ''; }
+    else cur += ch;
+  }
+  fields.push(cur.trim());
+  return fields;
+}
+
+function handleCustomCSV(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const nameEl = document.getElementById('custom-deck-name');
+  const name = nameEl.value.trim();
+  if (!name) { showCustomError('Please enter a deck name before uploading a CSV.'); event.target.value = ''; return; }
+
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const lines = ev.target.result.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const cards = [];
+    for (let i = 0; i < lines.length; i++) {
+      const cols = parseCSVLine(lines[i]);
+      const word = (cols[0] || '').trim();
+      const taboo = cols.slice(1, 6).map(t => t.trim()).filter(Boolean);
+      if (!word) continue; // skip blank rows silently
+      if (!taboo.length) { showCustomError(`Row ${i+1}: "${word}" needs at least one taboo word (column B onward).`); event.target.value = ''; return; }
+      cards.push({ word, taboo });
+    }
+    if (!cards.length) { showCustomError('No valid rows found in that CSV.'); event.target.value = ''; return; }
+    finalizeCustomDeck(name, cards);
+    event.target.value = '';
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function finalizeCustomDeck(name, cards) {
   const id = 'custom_' + Date.now();
   DECKS.push({ id, name, description: cards.length + ' custom cards', cards });
-  nameEl.value = ''; inputEl.value = '';
+  document.getElementById('custom-deck-name').value = '';
+  document.getElementById('custom-deck-input').value = '';
+  document.getElementById('custom-error').style.display = 'none';
   toggleCustomPanel();
   init(); // re-render deck list
 }
