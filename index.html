@@ -42,6 +42,13 @@
     transition: background 0.1s, border-color 0.1s;
   }
   .deck-item.selected .deck-check { background: #7b68d4; border-color: #7b68d4; color: white; }
+  .deck-remove-btn {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    border: none; background: #f5f5f5; color: #aaa; font-size: 13px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.1s, color 0.1s;
+  }
+  .deck-remove-btn:hover { background: #fde0e0; color: #e53935; }
   .deck-info { flex: 1; }
   .deck-name { font-size: 15px; font-weight: 600; color: #333; }
   .deck-meta { font-size: 12px; color: #aaa; margin-top: 2px; }
@@ -553,6 +560,7 @@ function init() {
   const list = document.getElementById('deck-list');
   list.innerHTML = '';
   DECKS.forEach(d => {
+    const isCustom = d.id.startsWith('custom_');
     const el = document.createElement('div');
     el.className = 'deck-item';
     el.dataset.id = d.id;
@@ -560,10 +568,27 @@ function init() {
       <div class="deck-info">
         <div class="deck-name">${d.name}</div>
         <div class="deck-meta">${d.cards.length} cards · ${d.description}</div>
-      </div>`;
+      </div>
+      ${isCustom ? `<button class="deck-remove-btn" title="Remove this deck" aria-label="Remove this deck">✕</button>` : ''}`;
     el.addEventListener('click', () => toggleDeck(d.id, el));
+    if (isCustom) {
+      el.querySelector('.deck-remove-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        removeCustomDeck(d.id);
+      });
+    }
     list.appendChild(el);
   });
+}
+
+function removeCustomDeck(id) {
+  const idx = DECKS.findIndex(d => d.id === id);
+  if (idx === -1) return;
+  DECKS.splice(idx, 1);
+  selectedDeckIds = selectedDeckIds.filter(x => x !== id);
+  document.getElementById('start-btn').classList.toggle('ready', selectedDeckIds.length > 0);
+  document.getElementById('mix-note').style.display = selectedDeckIds.length > 1 ? 'block' : 'none';
+  init();
 }
 
 function toggleDeck(id, el) {
